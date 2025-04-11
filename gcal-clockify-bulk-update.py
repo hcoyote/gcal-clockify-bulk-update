@@ -182,7 +182,8 @@ def main():
         if args.verbose:
             print(f"DEBUG:    {matched}, Duration: {duration:.2f}, Title: {title}, Start Date/Time: {start_date} {start_time}, End Date/Time: {end_date} {end_time}")
 
-        print(f"COMMAND: clockify-cli manual \"{project}\"  \"{start_date} {start_time}\" \"{rounded_end_time}\" \"{title}\" --task \"{task}\"")
+        print(f"clockify-cli manual \"{project}\"  \"{start_date} {start_time}\" \"{rounded_end_time}\" \"{title}\" --task \"{task}\"")
+        print(f"read")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Calculate the duration of events from gcalcli search output.")
