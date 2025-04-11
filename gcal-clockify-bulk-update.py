@@ -52,7 +52,7 @@ def run_gcalcli_search():
         previous_week_start, previous_week_end = get_previous_week_start_and_end()
     else:
         previous_week_start = parse_datetime(args.startdate,"00:00")
-        previous_week_end   = parse_datetime(args.enddate,"00:00")
+        previous_week_end   = parse_datetime(args.enddate,"23:59")
     
 
 
