@@ -166,16 +166,24 @@ def main():
 
 
         for company_name in clockify_tasks:
+
+            # search for poc or prospect in the title to set the right project
+            # otherwise it should be customer by default
+            if re.search(r'\b(poc|prospect)\b', title, re.IGNORECASE):
+                 project = "Prospects / PoCs"
+            else:
+                 project = "Customer"
+
+            # brute force fuzzy match against company name to see if we can set the 
+            # project task right
             result = re.findall('\\b('+company_name+'|'+company_name.replace(" ","")+')\\b', title, flags=re.IGNORECASE)
             if len(result)>0:
                  matched = f"matched company {company_name}"
-                 project = "Customer"
                  task    = company_name
                  break
             result = re.findall('\\b('+company_name+'|'+company_name.replace(" ","")+')\\b', title.replace(" ",""), flags=re.IGNORECASE)
             if len(result)>0:
                  matched = f"matched company {company_name}"
-                 project = "Customer"
                  task    = company_name
                  break
 
