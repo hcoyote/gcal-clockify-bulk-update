@@ -45,7 +45,6 @@ def round_up_to_nearest_15_minutes(duration):
     #return timedelta(minutes=rounded_minutes).total_seconds()/3600
     return timedelta(minutes=rounded_minutes).total_seconds()/60
 
-#def run_gcalcli_search(query):
 def run_gcalcli_search():
     #command = f"gcalcli search {query} --tsv --details all"
     if not args.startdate or not args.enddate:
@@ -56,9 +55,9 @@ def run_gcalcli_search():
     
 
 
-    print(f"Previous Week Start: {previous_week_start.strftime('%Y-%m-%d')}")
+    print(f"# Previous Week Start: {previous_week_start.strftime('%Y-%m-%d')}")
     span_start = previous_week_start.strftime('%Y-%m-%d')
-    print(f"Previous Week End:   {previous_week_end.strftime('%Y-%m-%d')}")
+    print(f"# Previous Week End:   {previous_week_end.strftime('%Y-%m-%d')}")
     span_end = previous_week_end.strftime('%Y-%m-%d')
 
     command = f"gcalcli agenda {span_start} {span_end} --tsv --details id --nodeclined"
@@ -169,10 +168,6 @@ def main():
 
             # search for poc or prospect in the title to set the right project
             # otherwise it should be customer by default
-            if re.search(r'\b(poc|prospect)\b', title, re.IGNORECASE):
-                 project = "Prospects / PoCs"
-            else:
-                 project = "Customer"
 
             # brute force fuzzy match against company name to see if we can set the 
             # project task right
@@ -180,18 +175,25 @@ def main():
             if len(result)>0:
                  matched = f"matched company {company_name}"
                  task    = company_name
+                 if re.search(r'\b(poc|prospect)\b', title, re.IGNORECASE):
+                     project = "Prospects / PoCs"
+                 else:
+                     project = "Customer"
                  break
             result = re.findall('\\b('+company_name+'|'+company_name.replace(" ","")+')\\b', title.replace(" ",""), flags=re.IGNORECASE)
             if len(result)>0:
                  matched = f"matched company {company_name}"
                  task    = company_name
+                 if re.search(r'\b(poc|prospect)\b', title, re.IGNORECASE):
+                     project = "Prospects / PoCs"
+                 else:
+                     project = "Customer"
                  break
 
         if args.verbose:
             print(f"DEBUG:    {matched}, Duration: {duration:.2f}, Title: {title}, Start Date/Time: {start_date} {start_time}, End Date/Time: {end_date} {end_time}")
 
         print(f"clockify-cli manual \"{project}\"  \"{start_date} {start_time}\" \"{rounded_end_time}\" \"{title}\" --task \"{task}\"")
-        print(f"read")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Calculate the duration of events from gcalcli search output.")
